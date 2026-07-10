@@ -8,10 +8,14 @@ import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
-  imports: [MerchantModule, AuthModule, PrismaModule,
+  imports: [
     ConfigModule.forRoot({
-      isGlobal:true,
+      isGlobal: true,
+      envFilePath: '.env',
     }),
+    MerchantModule,
+    AuthModule,
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
