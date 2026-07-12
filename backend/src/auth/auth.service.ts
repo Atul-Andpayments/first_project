@@ -89,6 +89,7 @@ export class AuthService {
         });
         return {
             message:'Login successful',
+            accessToken,
         };
     }
     async logout(res:Response){

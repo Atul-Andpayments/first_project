@@ -5,7 +5,7 @@ import { MerchantModule } from './merchant/merchant.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
-
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     MerchantModule,
     AuthModule,
     PrismaModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

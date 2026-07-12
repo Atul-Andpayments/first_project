@@ -18,10 +18,12 @@ enum RefundStatus{
   SUCCESS
   FAILED
 }
-enum PaymentStatus{
+enum PaymentStatus {
   PENDING
   SUCCESS
   FAILED
+  EXPIRED
+  CANCELLED
 }
 model Merchant {
   id String @id @default(cuid())
@@ -35,28 +37,29 @@ model Merchant {
 }
 
 model Payment {
-  id                    String        @id @default(cuid())
-  referenceNumber       String        @unique
-  stripePaymentIntentId String        @unique
+  id            String        @id @default(cuid())
 
-  amount                Decimal
-  currency              String        @default("INR")
+  customerName  String
+  email         String?
+  phone         String?
 
-  customerName          String
-  customerEmail         String
-  customerPhone         String?
+  amount        Decimal       @db.Decimal(12,2)
 
-  description           String?
+  description   String?
 
-  status                PaymentStatus @default(PENDING)
+  status        PaymentStatus @default(PENDING)
 
-  merchantId            String
-  merchant              Merchant      @relation(fields: [merchantId], references: [id])
+  paymentUrl    String?
 
-  refunds               Refund[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
+  expiresAt     DateTime?
+  paidAt        DateTime?
+
+  merchantId    String
+  merchant      Merchant      @relation(fields: [merchantId], references: [id])
+  refunds       Refund[]
 }
 
 model Refund {
