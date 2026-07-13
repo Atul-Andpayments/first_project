@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -9,6 +10,7 @@ import {
 
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/CreatePaymentDto';
+import { CreateRefundDto } from './dto/CreateRefundDto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('payments')
@@ -33,4 +35,27 @@ export class PaymentsController {
     return this.paymentsService.getAllPayments(req.user.id);
   }
 
+}
+
+/**
+ * Customer-facing mock payment portal — this is what the payment link
+ * opens. No auth: the customer isn't a logged-in merchant.
+ */
+@Controller('public/payments')
+export class PublicPaymentsController {
+  constructor(private readonly paymentsService: PaymentsService) {}
+
+  @Get(':paymentId')
+  getPaymentLink(@Param('paymentId') paymentId: string) {
+    return this.paymentsService.getPublicPayment(paymentId);
+  }
+
+  @Post(':paymentId/complete')
+  completePayment(
+    @Param('paymentId') paymentId: string,
+    @Req() req: { user: { id: string ,status:string} },
+    
+  ) {
+    return this.paymentsService.completePublicPayment(req, paymentId);
+  }
 }

@@ -14,6 +14,15 @@ export interface CreatedPayment {
   status: "PENDING" | "SUCCESS" | "FAILED" | "EXPIRED" | "CANCELLED";
 }
 
+export interface Refund {
+  id: string;
+  amount: string;
+  reason: string | null;
+  status: "PENDING" | "SUCCESS" | "FAILED";
+  paymentId: string;
+  createdAt: string;
+}
+
 export interface MerchantPayment {
   id: string;
   customerName: string;
@@ -24,6 +33,7 @@ export interface MerchantPayment {
   status: CreatedPayment["status"];
   paymentUrl: string | null;
   createdAt: string;
+  refunds: Refund[];
 }
 
 export const createPayment = async (data: CreatePaymentDto) => {
